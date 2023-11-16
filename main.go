@@ -10,9 +10,9 @@ func main() {
 	d := dictionary.New()
 
 	// Add words and definitions
-	d.Add("Go", "")
+	d.Add("Go", "Test")
 	d.Add("Map", "")
-	d.Add("Function", "")
+	d.Add("Function", "ok")
 
 	// Display the definition of a word
 	definition, err := d.Get("Go")
@@ -23,7 +23,7 @@ func main() {
 	}
 
 	// Remove a word
-	d.Remove("Function")
+	d.Remove("")
 
 	// Display the sorted list of words and their definitions
 	words, entries := d.List()
