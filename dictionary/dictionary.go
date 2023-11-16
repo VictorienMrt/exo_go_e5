@@ -1,49 +1,50 @@
 package dictionary
 
-import (
-	"errors"
-)
+import "errors"
 
-// Entry structure
 type Entry struct {
 	Definition string
 }
 
-// String representation of an Entry
 func (e Entry) String() string {
 	return e.Definition
 }
 
-// Dictionary structure
 type Dictionary struct {
 	entries map[string]Entry
 }
 
-// New creates a new Dictionary
 func New() *Dictionary {
 	return &Dictionary{entries: make(map[string]Entry)}
 }
 
-// Add a word and its definition to the dictionary
-func (d *Dictionary) Add(word string, definition string) {
+func (d *Dictionary) Add(word string, definition string) error {
+	if _, exists := d.entries[word]; exists {
+		return errors.New("word already exists")
+	}
+
 	d.entries[word] = Entry{Definition: definition}
+	return nil
 }
 
-// Get the definition of a word
 func (d *Dictionary) Get(word string) (Entry, error) {
 	entry, exists := d.entries[word]
 	if !exists {
-		return Entry{}, errors.New("word not found")
+		return Entry{}, errors.New("word does not exist")
 	}
+
 	return entry, nil
 }
 
-// Remove a word from the dictionary
-func (d *Dictionary) Remove(word string) {
+func (d *Dictionary) Remove(word string) error {
+	if _, exists := d.entries[word]; !exists {
+		return errors.New("word does not exist")
+	}
+
 	delete(d.entries, word)
+	return nil
 }
 
-// List all words in the dictionary
 func (d *Dictionary) List() ([]string, map[string]Entry) {
 	var words []string
 	for word := range d.entries {
@@ -51,4 +52,3 @@ func (d *Dictionary) List() ([]string, map[string]Entry) {
 	}
 	return words, d.entries
 }
-	
