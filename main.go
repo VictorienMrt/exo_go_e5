@@ -13,7 +13,7 @@ import (
 // Function main
 func main() {
 	reader := bufio.NewReader(os.Stdin) // Create a new reader for standard input
-	d := dictionary.New()               // Init a new dictionary object
+	d := dictionary.New("test.json")    // Init a new dictionary object
 
 	// Infinite loop to handle user input
 	for {
@@ -88,9 +88,18 @@ func actionRemove(d *dictionary.Dictionary, reader *bufio.Reader) {
 
 // Function to list all words and their definitions in the dictionary
 func actionList(d *dictionary.Dictionary) {
-	words, entries := d.List() // Get list of words and their corresponding entries
+	words, err := d.List() // Attempt to get the list of words from the dictionary
+	if err != nil {
+		fmt.Println("Failed to list words:", err)
+		return
+	}
+
 	for _, word := range words {
-		entry := entries[word] // Get each entry
-		fmt.Println(word, ":", entry)
+		entry, err := d.Get(word) // For each word, attempt to get the corresponding entry
+		if err != nil {
+			fmt.Println("Failed to get definition for word:", word, "with error:", err)
+			continue
+		}
+		fmt.Println("Word :", word, "--", "Description :", entry) // Print the word and its definition
 	}
 }
