@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"exo_go_e5/dictionary"
+	"exo_go_e5/dictionary" // assurez-vous que ce chemin correspond au nom du module dans go.mod
 	"fmt"
 	"os"
 	"strings"
@@ -13,7 +13,7 @@ func main() {
 	d := dictionary.New()
 
 	for {
-		fmt.Println("\nSelect a step [add, define, remove, list, exit]:")
+		fmt.Println("\nSelect an action [add, define, remove, list, exit]:")
 		action, _ := reader.ReadString('\n')
 		action = strings.TrimSpace(action)
 
@@ -30,17 +30,17 @@ func main() {
 			fmt.Println("End of program")
 			return
 		default:
-			fmt.Println("Not Recognized")
+			fmt.Println("Not recognized.")
 		}
 	}
 }
 
 func actionAdd(d *dictionary.Dictionary, reader *bufio.Reader) {
-	fmt.Print("Choose a word: ")
+	fmt.Print("Enter a word: ")
 	word, _ := reader.ReadString('\n')
 	word = strings.TrimSpace(word)
 
-	fmt.Print("Choose a definition: ")
+	fmt.Print("Enter a definition: ")
 	definition, _ := reader.ReadString('\n')
 	definition = strings.TrimSpace(definition)
 
@@ -79,9 +79,9 @@ func actionRemove(d *dictionary.Dictionary, reader *bufio.Reader) {
 }
 
 func actionList(d *dictionary.Dictionary) {
-	words, _ := d.List()
+	words, entries := d.List()
 	for _, word := range words {
-		entry, _ := d.Get(word)
+		entry := entries[word]
 		fmt.Println(word, ":", entry)
 	}
 }
