@@ -1,105 +1,65 @@
-// main package definition
 package main
 
-// Importing packages
 import (
-	"bufio" // For reading input
+	"encoding/json"
 	"exo_go_e5/dictionary"
-	"fmt"     // For formatted I/O operations
-	"os"      // For interfacing with the operating system
-	"strings" // For string manipulation
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-// Function main
 func main() {
-	reader := bufio.NewReader(os.Stdin) // Create a new reader for standard input
-	d := dictionary.New("test.json")    // Init a new dictionary object
+	d := dictionary.New("test.json")
+	r := mux.NewRouter()
 
-	// Infinite loop to handle user input
-	for {
-		fmt.Println("\nSelect an action [add, define, remove, list, exit]:")
-		action, _ := reader.ReadString('\n') // Action choice from user
-		action = strings.TrimSpace(action)
+	r.HandleFunc("/entry", addEntryHandler(d)).Methods("POST")
+	r.HandleFunc("/entry/{word}", getEntryHandler(d)).Methods("GET")
+	r.HandleFunc("/entry/{word}", deleteEntryHandler(d)).Methods("DELETE")
 
-		// Switch statement to handle the selected action
-		switch action {
-		case "add":
-			actionAdd(d, reader) // Calling the corresponding function
-		case "define":
-			actionDefine(d, reader)
-		case "remove":
-			actionRemove(d, reader)
-		case "list":
-			actionList(d)
-		case "exit":
-			fmt.Println("End of program")
-			return
-		default:
-			fmt.Println("Not recognized.") // Print error
-		}
-	}
+	log.Println("Server is running on :8080")
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-// Function to add a word to the dictionary
-func actionAdd(d *dictionary.Dictionary, reader *bufio.Reader) {
-	fmt.Print("Enter a word: ")
-	word, _ := reader.ReadString('\n')
-	word = strings.TrimSpace(word)
-
-	fmt.Print("Enter a definition: ")
-	definition, _ := reader.ReadString('\n')
-	definition = strings.TrimSpace(definition)
-
-	err := d.Add(word, definition) // Add the word to the dictionary
-	if err != nil {
-		fmt.Println("Failed to add word:", err) // Print error
-	} else {
-		fmt.Println("Word added.") // Print success message
-	}
-}
-
-// Function to define a word in the dictionary
-func actionDefine(d *dictionary.Dictionary, reader *bufio.Reader) {
-	fmt.Print("Enter a word: ")
-	word, _ := reader.ReadString('\n')
-	word = strings.TrimSpace(word)
-
-	entry, err := d.Get(word)
-	if err != nil {
-		fmt.Println("Failed to find word:", err)
-	} else {
-		fmt.Println("Definition:", entry)
-	}
-}
-
-// Function to remove a word from the dictionary
-func actionRemove(d *dictionary.Dictionary, reader *bufio.Reader) {
-	fmt.Print("Enter a word to remove: ")
-	word, _ := reader.ReadString('\n')
-	word = strings.TrimSpace(word)
-
-	err := d.Remove(word) // Remove the word from the dictionary
-	if err != nil {
-		fmt.Println("Failed to remove word:", err)
-	} else {
-		fmt.Println("Word removed.")
-	}
-}
-
-// Function to list all words and their definitions in the dictionary
-func actionList(d *dictionary.Dictionary) {
-	words, err := d.List() // Attempt to get the list of words from the dictionary
-	if err != nil {
-		fmt.Println("Failed to list words:", err)
-		return
-	}
-
-	for _, word := range words {
-		entry, err := d.Get(word) // For each word, attempt to get the corresponding entry
+func addEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var entry dictionary.Entry
+		err := json.NewDecoder(r.Body).Decode(&entry)
 		if err != nil {
-			fmt.Println("Failed to get definition for word:", word, "with error:", err)
-			continue
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
-		fmt.Println("Word :", word, "--", "Description :", entry) // Print the word and its definition
+		err = d.Add(entry.Word, entry.Definition)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+	}
+}
+
+func getEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		word := vars["word"]
+		entry, err := d.Get(word)
+		if err != nil {
+			http.Error(w, "Entry not found", http.StatusNotFound)
+			return
+		}
+		json.NewEncoder(w).Encode(entry)
+	}
+}
+
+func deleteEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		word := vars["word"]
+		err := d.Remove(word)
+		if err != nil {
+			http.Error(w, "Entry not found", http.StatusNotFound)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
 	}
 }
