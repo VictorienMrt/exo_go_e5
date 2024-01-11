@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"exo_go_e5/dictionary"
+	"exo_go_e5/middleware"
 	"log"
 	"net/http"
 
@@ -12,6 +13,7 @@ import (
 func main() {
 	d := dictionary.New("test.json")
 	r := mux.NewRouter()
+	r.Use(middleware.LoggerMiddleware)
 
 	r.HandleFunc("/entry", addEntryHandler(d)).Methods("POST")
 	r.HandleFunc("/entry/{word}", getEntryHandler(d)).Methods("GET")

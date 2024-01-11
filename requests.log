@@ -1,0 +1,29 @@
+LOG: 2023/11/22 16:58:29 middleware.go:20: POST /entry 0s
+LOG: 2023/11/22 17:05:11 Received POST request on /entry
+LOG: 2023/11/22 17:05:11 Handled POST request on /entry with status 201 in 1.5438ms
+POST /entry 201 {
+  "word": "TestMiddleware2",
+  "definition": "Ceci est un test pour le middleware"
+}
+DELETE /entry/TestPostPostman2 404 /entry/TestPostPostman2
+DELETE /entry/TestMiddleware 200 /entry/TestMiddleware
+[22-11-2023 17:20:02] DELETE /entry/TestMiddleware2 200 /entry/TestMiddleware2
+[22-11-2023 17:21:48] DELETE /entry/TestMiddleware 404 /entry/TestMiddleware
+[22-11-2023 17:22:28] GET /entry/TestMiddleware 404 /entry/TestMiddleware
+[22-11-2023 17:23:15] GET /entry/TestMiddleware 404 /entry/TestMiddleware
+[22-11-2023 17:23:36] GET /entry/exo3 200 /entry/exo3
+[22-11-2023 17:24:46] DELETE /entry/TestMiddleware1 200 /entry/TestMiddleware1
+[22-11-2023 17:25:22] DELETE /entry/%22%22 404 /entry/%22%22
+[22-11-2023 17:27:04] POST /entry 201 {
+    "word": "Bonjour",
+    "definition": "monde"
+}
+[22-11-2023 17:27:46] POST /entry 201 {
+    "word": "Hello",
+    "definition": "world"
+}
+[22-11-2023 17:37:49] POST /entry 201 {
+    "word": "Hello1",
+    "definition": "world"
+}
+[22-11-2023 17:38:17] DELETE /entry/Hello1 200
