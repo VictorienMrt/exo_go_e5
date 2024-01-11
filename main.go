@@ -14,6 +14,7 @@ func main() {
 	d := dictionary.New("test.json")
 	r := mux.NewRouter()
 	r.Use(middleware.LoggerMiddleware)
+	r.Use(middleware.AuthMiddleware)
 
 	r.HandleFunc("/entry", addEntryHandler(d)).Methods("POST")
 	r.HandleFunc("/entry/{word}", getEntryHandler(d)).Methods("GET")
