@@ -36,6 +36,12 @@ func addEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+
+		if len(entry.Word) < 3 || len(entry.Definition) < 5 {
+			http.Error(w, "Invalid entry: Word and definition must be longer.", http.StatusBadRequest)
+			return
+		}
+
 		err = d.Add(entry.Word, entry.Definition)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

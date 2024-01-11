@@ -52,11 +52,14 @@ type responseWriter struct {
 	statusCode int
 }
 
+func (rw *responseWriter) Status() int {
+	return rw.statusCode
+}
+
 func (rw *responseWriter) WriteHeader(code int) {
 	rw.statusCode = code
 	rw.ResponseWriter.WriteHeader(code)
-}
-
-func (rw *responseWriter) Status() int {
-	return rw.statusCode
+	if code >= 400 {
+		log.Printf("Error: Status code %d", code)
+	}
 }
