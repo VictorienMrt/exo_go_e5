@@ -14,11 +14,15 @@ func main() {
 	d := dictionary.New("test.json")
 	r := mux.NewRouter()
 	r.Use(middleware.LoggerMiddleware)
-	r.Use(middleware.AuthMiddleware)
 
-	r.HandleFunc("/entry", addEntryHandler(d)).Methods("POST")
-	r.HandleFunc("/entry/{word}", getEntryHandler(d)).Methods("GET")
-	r.HandleFunc("/entry/{word}", deleteEntryHandler(d)).Methods("DELETE")
+	r.HandleFunc("/login", loginHandler).Methods("POST")
+
+	s := r.PathPrefix("/").Subrouter()
+	s.Use(middleware.AuthMiddleware)
+	s.HandleFunc("/protected-route", protectedRouteHandler).Methods("GET")
+	s.HandleFunc("/entry", addEntryHandler(d)).Methods("POST")
+	s.HandleFunc("/entry/{word}", getEntryHandler(d)).Methods("GET")
+	s.HandleFunc("/entry/{word}", deleteEntryHandler(d)).Methods("DELETE")
 
 	log.Println("Server is running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
@@ -65,4 +69,9 @@ func deleteEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
 		}
 		w.WriteHeader(http.StatusOK)
 	}
+}
+
+func protectedRouteHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Access to protected route"))
 }

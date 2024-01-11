@@ -27,3 +27,7 @@ DELETE /entry/TestMiddleware 200 /entry/TestMiddleware
     "definition": "world"
 }
 [22-11-2023 17:38:17] DELETE /entry/Hello1 200
+[11-01-2024 13:57:11] POST /login 401 
+[11-01-2024 13:58:17] POST /login 401 
+[11-01-2024 14:00:09] POST /login 401 
+[11-01-2024 14:05:49] POST /login 200 
