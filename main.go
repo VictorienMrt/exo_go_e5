@@ -27,7 +27,7 @@ func main() {
 	// Apply the AuthMiddleware to all routes under the subrouter.
 	s.Use(middleware.AuthMiddleware)
 	// Define various endpoints and their corresponding handlers.
-	s.HandleFunc("/protected-route", protectedRouteHandler).Methods("GET")
+	s.HandleFunc("/protected-route", protectedRouteHandler).Methods("GET") // Route test for authenticated users.
 	s.HandleFunc("/entry", addEntryHandler(d)).Methods("POST")
 	s.HandleFunc("/entry/{word}", getEntryHandler(d)).Methods("GET")
 	s.HandleFunc("/entry/{word}", deleteEntryHandler(d)).Methods("DELETE")
@@ -105,7 +105,7 @@ func deleteEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
 	}
 }
 
-// protectedRouteHandler is an example handler for a protected route.
+// protectedRouteHandler is a test function for authenticated users.
 func protectedRouteHandler(w http.ResponseWriter, r *http.Request) {
 	// This is a placeholder response for a protected route.
 	w.WriteHeader(http.StatusOK)

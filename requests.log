@@ -37,3 +37,18 @@ DELETE /entry/TestMiddleware 200 /entry/TestMiddleware
     "word": "TestAuth",
     "definition": "Je suis test auth"
 }
+[18-01-2024 10:21:02] POST /login 200 
+[18-01-2024 10:21:47] POST /entry 401 {
+    "word": "Hello1",
+    "definition": "world"
+}
+[18-01-2024 10:22:01] POST /login 200 
+[18-01-2024 10:22:40] POST /entry 401 {
+    "word": "hellogoproject",
+    "definition": "hellogoproject"
+}
+[18-01-2024 10:23:28] POST /entry 201 {
+    "word": "hellogoproject",
+    "definition": "hellogoproject"
+}
+[18-01-2024 10:33:32] GET /protected-route 200
