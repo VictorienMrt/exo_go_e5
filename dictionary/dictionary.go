@@ -6,23 +6,30 @@ import (
 	"os"
 )
 
+// Entry represents a dictionary entry with a word and its definition.
 type Entry struct {
 	Word       string `json:"word"`
 	Definition string `json:"definition"`
 }
 
+// String returns the formatted representation of an Entry.
 func (e Entry) String() string {
 	return e.Word + ": " + e.Definition
 }
 
+// Dictionary represents the main structure of the dictionary,
+// containing the filepath of the JSON file where entries are stored.
 type Dictionary struct {
 	filepath string
 }
 
+// New creates a new Dictionary instance with a given filepath.
 func New(filepath string) *Dictionary {
 	return &Dictionary{filepath: filepath}
 }
 
+// Add inserts a new word and its definition into the dictionary.
+// Returns an error if the word already exists.
 func (d *Dictionary) Add(word string, definition string) error {
 	entries, err := d.readEntries()
 	if err != nil {
@@ -37,6 +44,8 @@ func (d *Dictionary) Add(word string, definition string) error {
 	return d.writeEntries(entries)
 }
 
+// Get retrieves an entry by word.
+// Returns an error if the word does not exist in the dictionary.
 func (d *Dictionary) Get(word string) (Entry, error) {
 	entries, err := d.readEntries()
 	if err != nil {
@@ -51,6 +60,8 @@ func (d *Dictionary) Get(word string) (Entry, error) {
 	return entry, nil
 }
 
+// Remove deletes an entry by word.
+// Returns an error if the word does not exist in the dictionary.
 func (d *Dictionary) Remove(word string) error {
 	entries, err := d.readEntries()
 	if err != nil {
@@ -65,6 +76,7 @@ func (d *Dictionary) Remove(word string) error {
 	return d.writeEntries(entries)
 }
 
+// List returns a list of all words in the dictionary.
 func (d *Dictionary) List() ([]string, error) {
 	entries, err := d.readEntries()
 	if err != nil {
@@ -78,6 +90,7 @@ func (d *Dictionary) List() ([]string, error) {
 	return words, nil
 }
 
+// readEntries reads and unmarshals the entries from the JSON file.
 func (d *Dictionary) readEntries() (map[string]Entry, error) {
 	file, err := os.ReadFile(d.filepath)
 	if err != nil {
@@ -97,6 +110,7 @@ func (d *Dictionary) readEntries() (map[string]Entry, error) {
 	return entries, nil
 }
 
+// writeEntries marshals and writes the entries to the JSON file.
 func (d *Dictionary) writeEntries(entries map[string]Entry) error {
 	file, err := json.Marshal(entries)
 	if err != nil {
