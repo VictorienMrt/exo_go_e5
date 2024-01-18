@@ -31,6 +31,7 @@ func main() {
 	s.HandleFunc("/entry", addEntryHandler(d)).Methods("POST")
 	s.HandleFunc("/entry/{word}", getEntryHandler(d)).Methods("GET")
 	s.HandleFunc("/entry/{word}", deleteEntryHandler(d)).Methods("DELETE")
+	s.HandleFunc("/allEntries", getAllEntriesHandler(d)).Methods("GET")
 
 	// Start the server on port 8080 and log any fatal errors.
 	log.Println("Server is running on :8080")
@@ -49,9 +50,15 @@ func addEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
 			return
 		}
 
-		// Validate the entry data.
-		if len(entry.Word) < 3 || len(entry.Definition) < 5 {
-			http.Error(w, "Invalid entry: Word and definition must be longer.", http.StatusBadRequest)
+		// Validate the word length.
+		if len(entry.Word) < 3 {
+			http.Error(w, "Invalid entry: Word must be longer than 2 characters.", http.StatusBadRequest)
+			return
+		}
+
+		// Validate the definition length.
+		if len(entry.Definition) < 5 {
+			http.Error(w, "Invalid entry: Definition must be longer than 4 characters.", http.StatusBadRequest)
 			return
 		}
 
@@ -102,6 +109,26 @@ func deleteEntryHandler(d *dictionary.Dictionary) http.HandlerFunc {
 		}
 		// Respond with a status code indicating successful deletion.
 		w.WriteHeader(http.StatusOK)
+	}
+}
+
+// getAllEntriesHandler returns all dictionary entries.
+func getAllEntriesHandler(d *dictionary.Dictionary) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Retrieve all entries from the dictionary.
+		entries, err := d.List()
+		if err != nil {
+			// Respond with an error if unable to retrieve entries.
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Send the entries back in the response body.
+		err = json.NewEncoder(w).Encode(entries)
+		if err != nil {
+			// Handle any errors during JSON encoding.
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	}
 }
 

@@ -52,3 +52,42 @@ DELETE /entry/TestMiddleware 200 /entry/TestMiddleware
     "definition": "hellogoproject"
 }
 [18-01-2024 10:33:32] GET /protected-route 200
+[18-01-2024 10:41:15] POST /entry 400 {
+    "word": "he",
+    "definition": "he"
+}
+[18-01-2024 10:43:05] POST /entry 400 {
+    "word": "hello141",
+    "definition": "he"
+}
+[18-01-2024 10:46:37] POST /entry 400 {
+    "word": "he",
+    "definition": "he"
+}
+[18-01-2024 10:46:51] POST /entry 400 {
+    "word": "heloooooo",
+    "definition": "he"
+}
+[18-01-2024 10:48:01] POST /login 200 
+[18-01-2024 10:48:55] GET /entry/exo3 401
+[18-01-2024 10:49:02] GET /entry/exo3 404
+[18-01-2024 10:49:42] DELETE /entry/Hello 401
+[18-01-2024 10:49:48] DELETE /entry/Hello 200
+[18-01-2024 10:50:35] GET /entry/exo3 404
+[18-01-2024 10:51:55] GET /entry/TestPostPostman 200
+[18-01-2024 10:52:53] GET /protected-route 200
+[18-01-2024 10:53:06] POST /login 200 
+[18-01-2024 10:58:58] GET /allEntries 200
+[18-01-2024 10:59:50] GET /entry/TestAuth 200
+[18-01-2024 11:00:01] POST /entry 400 {
+    "word": "heloooooo",
+    "definition": "he"
+}
+[18-01-2024 11:00:10] POST /entry 400 {
+    "word": "he",
+    "definition": "hemmmmmmmmmmmm"
+}
+[18-01-2024 11:00:17] POST /entry 400 {
+    "word": "he",
+    "definition": "he"
+}

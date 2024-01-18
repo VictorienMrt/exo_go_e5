@@ -76,18 +76,18 @@ func (d *Dictionary) Remove(word string) error {
 	return d.writeEntries(entries)
 }
 
-// List returns a list of all words in the dictionary.
-func (d *Dictionary) List() ([]string, error) {
+// List returns all entries in the dictionary.
+func (d *Dictionary) List() ([]Entry, error) {
 	entries, err := d.readEntries()
 	if err != nil {
 		return nil, err
 	}
 
-	var words []string
-	for word := range entries {
-		words = append(words, word)
+	var allEntries []Entry
+	for _, entry := range entries {
+		allEntries = append(allEntries, entry)
 	}
-	return words, nil
+	return allEntries, nil
 }
 
 // readEntries reads and unmarshals the entries from the JSON file.
