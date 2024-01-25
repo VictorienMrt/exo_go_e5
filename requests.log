@@ -91,3 +91,18 @@ DELETE /entry/TestMiddleware 200 /entry/TestMiddleware
     "word": "he",
     "definition": "he"
 }
+[25-01-2024 10:09:34] POST /login 200 
+[25-01-2024 10:42:35] GET /protected-route 401
+[25-01-2024 10:42:41] GET /protected-route 200
+[25-01-2024 10:43:19] POST /entry 400 {
+    "word": "TestEvaLBlanc",
+    "definition": "Tes"
+}
+[25-01-2024 10:43:35] POST /entry 400 {
+    "word": "T",
+    "definition": "TestEvaLBlanc"
+}
+[25-01-2024 10:43:43] POST /entry 201 {
+    "word": "TestEvaLBlanc",
+    "definition": "TestEvaLBlanc"
+}

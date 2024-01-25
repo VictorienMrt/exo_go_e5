@@ -112,6 +112,7 @@ func (d *Dictionary) readEntries() (map[string]Entry, error) {
 
 // writeEntries marshals and writes the entries to the JSON file.
 func (d *Dictionary) writeEntries(entries map[string]Entry) error {
+	// Convert(marshal) entries to JSON
 	file, err := json.Marshal(entries)
 	if err != nil {
 		return err
