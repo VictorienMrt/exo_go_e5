@@ -22,6 +22,7 @@ func TestAdd(t *testing.T) {
 	assert.NotNil(t, err, "Add should return an error for a duplicate word")
 }
 
+// Function Test Get
 func TestGet(t *testing.T) {
 	d := New("test.json")
 	defer os.Remove("test.json")
@@ -39,6 +40,7 @@ func TestGet(t *testing.T) {
 	assert.NotNil(t, err, "Get should return an error for a non-existing word")
 }
 
+// Function Test Remove
 func TestRemove(t *testing.T) {
 	d := New("test.json")
 	defer os.Remove("test.json")
@@ -54,6 +56,7 @@ func TestRemove(t *testing.T) {
 	assert.NotNil(t, err, "Remove should return an error for a non-existing word")
 }
 
+// Function Test Get All
 func TestList(t *testing.T) {
 	d := New("test.json")
 	defer os.Remove("test.json")
